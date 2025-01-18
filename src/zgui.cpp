@@ -34,6 +34,31 @@ extern "C"
         ImGui::SetAllocatorFunctions(alloc_func, free_func, nullptr);
     }
 
+    ZGUI_API void zguiSetNextWindowViewport(ImGuiID viewport_id)
+    {
+        ImGui::SetNextWindowViewport(viewport_id);
+    }
+
+    ZGUI_API ImGuiWindowClass *zguiWindowClass_Init(void)
+    {
+        return new ImGuiWindowClass();
+    }
+
+    ZGUI_API void zguiWindowClass_Deinit(ImGuiWindowClass *window_class)
+    {
+        delete window_class;
+    }
+
+    ZGUI_API void zguiSetNextWindowClass(ImGuiWindowClass *window_class)
+    {
+        ImGui::SetNextWindowClass(window_class);
+    }
+
+    ZGUI_API void zguiSetNextWindowDockID(ImGuiID dock_id, ImGuiCond cond)
+    {
+        ImGui::SetNextWindowDockID(dock_id, cond);
+    }
+
     ZGUI_API void zguiSetNextWindowPos(float x, float y, ImGuiCond cond, float pivot_x, float pivot_y)
     {
         ImGui::SetNextWindowPos({x, y}, cond, {pivot_x, pivot_y});
@@ -1167,7 +1192,8 @@ extern "C"
         ImGui::ShowDemoWindow(p_open);
     }
 
-    ZGUI_API void zguiShowMetricsWindow(bool* p_open) {
+    ZGUI_API void zguiShowMetricsWindow(bool *p_open)
+    {
         ImGui::ShowMetricsWindow(p_open);
     }
 
@@ -1525,7 +1551,8 @@ extern "C"
         return ImGui::GetIO().WantTextInput;
     }
 
-    ZGUI_API float zguiIoFramerate() {
+    ZGUI_API float zguiIoFramerate()
+    {
         return ImGui::GetIO().Framerate;
     }
 
@@ -2535,6 +2562,11 @@ extern "C"
         return ImGui::GetMainViewport();
     }
 
+    ZGUI_API ImGuiID zguiViewport_GetID(ImGuiViewport *viewport)
+    {
+        return viewport->ID;
+    }
+
     ZGUI_API void zguiViewport_GetPos(ImGuiViewport *viewport, float p[2])
     {
         const ImVec2 pos = viewport->Pos;
@@ -2586,6 +2618,11 @@ extern "C"
     ZGUI_API void zguiDockBuilderDockWindow(const char *window_name, ImGuiID node_id)
     {
         ImGui::DockBuilderDockWindow(window_name, node_id);
+    }
+
+    ZGUI_API bool zguiDockBuilderExistsNode(ImGuiID node_id)
+    {
+        return ImGui::DockBuilderGetNode(node_id) != NULL;
     }
 
     ZGUI_API ImGuiID zguiDockBuilderAddNode(ImGuiID node_id, ImGuiDockNodeFlags flags)

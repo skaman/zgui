@@ -666,6 +666,50 @@ extern fn zguiShowMetricsWindow(popen: ?*bool) void;
 // Windows
 //
 //--------------------------------------------------------------------------------------------------
+pub const ViewportFlags = packed struct(c_int) {
+    is_platform_window: bool = false,
+    is_platform_monitor: bool = false,
+    owned_by_app: bool = false,
+    _padding: u29 = 0,
+};
+
+pub const WindowClass = extern struct {
+    class_id: Ident,
+    parent_viewport_id: Ident,
+    focus_route_parent_window_id: Ident,
+    viewport_flags_override_set: ViewportFlags,
+    viewport_flags_override_clear: ViewportFlags,
+    tab_item_flags_override_set: TabItemFlags,
+    dock_node_flags_override_set: DockNodeFlags,
+    docking_always_tab_bar: bool,
+    docking_allow_unclassed: bool,
+
+    pub fn init() *WindowClass {
+        return zguiWindowClass_Init();
+    }
+    extern fn zguiWindowClass_Init() *WindowClass;
+
+    pub fn deinit(self: *WindowClass) void {
+        zguiWindowClass_Deinit(self);
+    }
+    extern fn zguiWindowClass_Deinit(window_class: *WindowClass) void;
+};
+//--------------------------------------------------------------------------------------------------
+pub fn setNextWindowClass(window_class: *WindowClass) void {
+    zguiSetNextWindowClass(window_class);
+}
+extern fn zguiSetNextWindowClass(window_class: *WindowClass) void;
+//--------------------------------------------------------------------------------------------------
+pub fn setNextWindowDockID(dock_id: Ident, cond: Condition) void {
+    zguiSetNextWindowDockID(dock_id, cond);
+}
+extern fn zguiSetNextWindowDockID(dock_id: Ident, cond: Condition) void;
+//--------------------------------------------------------------------------------------------------
+pub fn setNextWindowViewport(viewport_id: Ident) void {
+    zguiSetNextWindowViewport(viewport_id);
+}
+extern fn zguiSetNextWindowViewport(viewport_id: Ident) void;
+//--------------------------------------------------------------------------------------------------
 const SetNextWindowPos = struct {
     x: f32,
     y: f32,
@@ -951,6 +995,7 @@ pub const DockSpaceOverViewport = zguiDockSpaceOverViewport;
 pub fn dockBuilderDockWindow(window_name: [:0]const u8, node_id: Ident) void {
     zguiDockBuilderDockWindow(window_name.ptr, node_id);
 }
+pub const dockBuilderExistsNode = zguiDockBuilderExistsNode;
 pub const dockBuilderAddNode = zguiDockBuilderAddNode;
 pub const dockBuilderRemoveNode = zguiDockBuilderRemoveNode;
 pub fn dockBuilderSetNodePos(node_id: Ident, pos: [2]f32) void {
@@ -963,6 +1008,7 @@ pub const dockBuilderSplitNode = zguiDockBuilderSplitNode;
 pub const dockBuilderFinish = zguiDockBuilderFinish;
 
 extern fn zguiDockBuilderDockWindow(window_name: [*:0]const u8, node_id: Ident) void;
+extern fn zguiDockBuilderExistsNode(node_id: Ident) bool;
 extern fn zguiDockBuilderAddNode(node_id: Ident, flags: DockNodeFlags) Ident;
 extern fn zguiDockBuilderRemoveNode(node_id: Ident) void;
 extern fn zguiDockBuilderSetNodePos(node_id: Ident, pos: *const [2]f32) void;
@@ -3635,6 +3681,11 @@ extern fn zguiSetTabItemClosed(tab_or_docked_window_label: [*:0]const u8) void;
 //
 //--------------------------------------------------------------------------------------------------
 pub const Viewport = *opaque {
+    pub fn getId(viewport: Viewport) Ident {
+        return zguiViewport_GetID(viewport);
+    }
+    extern fn zguiViewport_GetID(viewport: Viewport) Ident;
+
     pub fn getPos(viewport: Viewport) [2]f32 {
         var pos: [2]f32 = undefined;
         zguiViewport_GetPos(viewport, &pos);
