@@ -39,7 +39,7 @@ const Style = extern struct {
     }
 };
 
-const StyleColor = enum(c_int) {
+pub const StyleColor = enum(c_int) {
     bg,
     grid,
     node_bg,
