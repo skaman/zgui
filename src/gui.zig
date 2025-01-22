@@ -135,6 +135,18 @@ extern fn zguiSetAllocatorFunctions(
     free_func: ?*const fn (?*anyopaque, ?*anyopaque) callconv(.C) void,
 ) void;
 //--------------------------------------------------------------------------------------------------
+pub const BackendFlags = packed struct(c_int) {
+    has_gamepad: bool = false,
+    has_mouse_cursors: bool = false,
+    has_set_mouse_pos: bool = false,
+    renderer_has_vtx_offset: bool = false,
+    _padding0: u6 = 0,
+    platform_has_viewports: bool = false,
+    has_mouse_hovered_viewport: bool = false,
+    renderer_has_viewports: bool = false,
+    _padding1: u19 = 0,
+};
+
 pub const ConfigFlags = packed struct(c_int) {
     nav_enable_keyboard: bool = false,
     nav_enable_gamepad: bool = false,
@@ -195,6 +207,120 @@ pub const FontConfig = extern struct {
         return zguiFontConfig_Init();
     }
     extern fn zguiFontConfig_Init() FontConfig;
+};
+
+pub const c_void = opaque {};
+
+pub fn updatePlatformWindows() void {
+    zguiUpdatePlatformWindows();
+}
+extern fn zguiUpdatePlatformWindows() void;
+
+pub fn renderPlatformWindowsDefault() void {
+    zguiRenderPlatformWindowsDefault();
+}
+extern fn zguiRenderPlatformWindowsDefault() void;
+
+pub const platform_io = struct {
+    pub const WindowPos = extern struct {
+        x: f32,
+        y: f32,
+    };
+
+    pub const WindowSize = extern struct {
+        width: f32,
+        height: f32,
+    };
+
+    pub const PlatformCreateWindowCallback = fn (view_port: Viewport) callconv(.C) void;
+    pub fn setPlatformCreateWindowCallback(callback: PlatformCreateWindowCallback) void {
+        return zguiSetPlatformCreateWindowCallback(callback);
+    }
+    extern fn zguiSetPlatformCreateWindowCallback(callback: *const PlatformCreateWindowCallback) callconv(.C) void;
+
+    pub const PlatformDestroyWindowCallback = fn (view_port: Viewport) callconv(.C) void;
+    pub fn setPlatformDestroyWindowCallback(callback: PlatformDestroyWindowCallback) void {
+        return zguiSetPlatformDestroyWindowCallback(callback);
+    }
+    extern fn zguiSetPlatformDestroyWindowCallback(callback: *const PlatformDestroyWindowCallback) callconv(.C) void;
+
+    pub const PlatformShowWindowCallback = fn (view_port: Viewport) callconv(.C) void;
+    pub fn setPlatformShowWindowCallback(callback: PlatformShowWindowCallback) void {
+        return zguiSetPlatformShowWindowCallback(callback);
+    }
+    extern fn zguiSetPlatformShowWindowCallback(callback: *const PlatformShowWindowCallback) callconv(.C) void;
+
+    pub const PlatformSetWindowPosCallback = fn (view_port: Viewport, size: WindowPos) callconv(.C) void;
+    pub fn setPlatformSetWindowPosCallback(callback: PlatformSetWindowPosCallback) void {
+        return zguiSetPlatformSetWindowPosCallback(callback);
+    }
+    extern fn zguiSetPlatformSetWindowPosCallback(callback: *const PlatformSetWindowPosCallback) callconv(.C) void;
+
+    pub const PlatformGetWindowPosCallback = fn (view_port: Viewport) callconv(.C) WindowPos;
+    pub fn setPlatformGetWindowPosCallback(callback: PlatformGetWindowPosCallback) void {
+        return zguiSetPlatformGetWindowPosCallback(callback);
+    }
+    extern fn zguiSetPlatformGetWindowPosCallback(callback: *const PlatformGetWindowPosCallback) callconv(.C) void;
+
+    pub const PlatformSetWindowSizeCallback = fn (view_port: Viewport, size: WindowSize) callconv(.C) void;
+    pub fn setPlatformSetWindowSizeCallback(callback: PlatformSetWindowSizeCallback) void {
+        return zguiSetPlatformSetWindowSizeCallback(callback);
+    }
+    extern fn zguiSetPlatformSetWindowSizeCallback(callback: *const PlatformSetWindowSizeCallback) callconv(.C) void;
+
+    pub const PlatformGetWindowSizeCallback = fn (view_port: Viewport) callconv(.C) WindowSize;
+    pub fn setPlatformGetWindowSizeCallback(callback: PlatformGetWindowSizeCallback) void {
+        return zguiSetPlatformGetWindowSizeCallback(callback);
+    }
+    extern fn zguiSetPlatformGetWindowSizeCallback(callback: *const PlatformGetWindowSizeCallback) callconv(.C) void;
+
+    pub const PlatformSetWindowFocusCallback = fn (view_port: Viewport) callconv(.C) void;
+    pub fn setPlatformSetWindowFocusCallback(callback: PlatformSetWindowFocusCallback) void {
+        return zguiSetPlatformSetWindowFocusCallback(callback);
+    }
+    extern fn zguiSetPlatformSetWindowFocusCallback(callback: *const PlatformSetWindowFocusCallback) callconv(.C) void;
+
+    pub const PlatformGetWindowFocusCallback = fn (view_port: Viewport) callconv(.C) bool;
+    pub fn setPlatformGetWindowFocusCallback(callback: PlatformGetWindowFocusCallback) void {
+        return zguiSetPlatformGetWindowFocusCallback(callback);
+    }
+    extern fn zguiSetPlatformGetWindowFocusCallback(callback: *const PlatformGetWindowFocusCallback) callconv(.C) void;
+
+    pub const PlatformGetWindowMinimizedCallback = fn (view_port: Viewport) callconv(.C) bool;
+    pub fn setPlatformGetWindowMinimizedCallback(callback: PlatformGetWindowMinimizedCallback) void {
+        return zguiSetPlatformGetWindowMinimizedCallback(callback);
+    }
+    extern fn zguiSetPlatformGetWindowMinimizedCallback(callback: *const PlatformGetWindowMinimizedCallback) callconv(.C) void;
+
+    pub const PlatformSetWindowTitleCallback = fn (view_port: Viewport, str: [*:0]const u8) callconv(.C) void;
+    pub fn setPlatformSetWindowTitleCallback(callback: PlatformSetWindowTitleCallback) void {
+        return zguiSetPlatformSetWindowTitleCallback(callback);
+    }
+    extern fn zguiSetPlatformSetWindowTitleCallback(callback: *const PlatformSetWindowTitleCallback) callconv(.C) void;
+
+    pub const RendererCreateWindowCallback = fn (view_port: Viewport) callconv(.C) void;
+    pub fn setRendererCreateWindowCallback(callback: RendererCreateWindowCallback) void {
+        return zguiSetRendererCreateWindowCallback(callback);
+    }
+    extern fn zguiSetRendererCreateWindowCallback(callback: *const RendererCreateWindowCallback) callconv(.C) void;
+
+    pub const RendererDestroyWindowCallback = fn (view_port: Viewport) callconv(.C) void;
+    pub fn setRendererDestroyWindowCallback(callback: RendererDestroyWindowCallback) void {
+        return zguiSetRendererDestroyWindowCallback(callback);
+    }
+    extern fn zguiSetRendererDestroyWindowCallback(callback: *const RendererDestroyWindowCallback) callconv(.C) void;
+
+    pub const RendererSetWindowSizeCallback = fn (view_port: Viewport, size: WindowSize) callconv(.C) void;
+    pub fn setRendererSetWindowSizeCallback(callback: RendererSetWindowSizeCallback) void {
+        return zguiSetRendererSetWindowSizeCallback(callback);
+    }
+    extern fn zguiSetRendererSetWindowSizeCallback(callback: *const RendererSetWindowSizeCallback) callconv(.C) void;
+
+    pub const RendererRenderWindowCallback = fn (view_port: Viewport, render_arg: *c_void) callconv(.C) void;
+    pub fn setRendererRenderWindowCallback(callback: RendererRenderWindowCallback) void {
+        return zguiSetRendererRenderWindowCallback(callback);
+    }
+    extern fn zguiSetRendererRenderWindowCallback(callback: *const RendererRenderWindowCallback) callconv(.C) void;
 };
 
 pub const io = struct {
@@ -315,6 +441,9 @@ pub const io = struct {
     /// `pub fn setDisplayFramebufferScale(sx: f32, sy: f32) void`
     pub const setDisplayFramebufferScale = zguiIoSetDisplayFramebufferScale;
     extern fn zguiIoSetDisplayFramebufferScale(sx: f32, sy: f32) void;
+
+    pub const setBackendFlags = zguiIoSetBackendFlags;
+    extern fn zguiIoSetBackendFlags(flags: BackendFlags) void;
 
     /// `pub fn setConfigFlags(flags: ConfigFlags) void`
     pub const setConfigFlags = zguiIoSetConfigFlags;
@@ -3713,6 +3842,27 @@ pub const Viewport = *opaque {
         return pos;
     }
     extern fn zguiViewport_GetWorkSize(viewport: Viewport, size: *[2]f32) void;
+
+    pub fn getRendererUserData(viewport: Viewport) ?*c_void {
+        return zguiViewport_GetRendererUserData(viewport);
+    }
+    extern fn zguiViewport_GetRendererUserData(viewport: Viewport) ?*c_void;
+
+    pub fn setRendererUserData(viewport: Viewport, data: ?*c_void) void {
+        zguiViewport_SetRendererUserData(viewport, data);
+    }
+    extern fn zguiViewport_SetRendererUserData(viewport: Viewport, data: ?*c_void) void;
+
+    pub fn getPlatformUserData(viewport: Viewport) ?*c_void {
+        return zguiViewport_GetPlatformUserData(viewport);
+    }
+    extern fn zguiViewport_GetPlatformUserData(viewport: Viewport) ?*c_void;
+
+    //const DrawData = opaque {};
+    pub fn getDrawData(viewport: Viewport) DrawData {
+        return zguiViewport_GetDrawData(viewport);
+    }
+    extern fn zguiViewport_GetDrawData(viewport: Viewport) DrawData;
 
     pub fn getCenter(viewport: Viewport) [2]f32 {
         const pos = viewport.getPos();

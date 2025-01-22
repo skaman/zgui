@@ -1465,6 +1465,106 @@ extern "C"
         return ImGui::GetClipboardText();
     }
 
+    ZGUI_API void zguiUpdatePlatformWindows(void)
+    {
+        ImGui::UpdatePlatformWindows();
+    }
+
+    ZGUI_API void zguiRenderPlatformWindowsDefault(void)
+    {
+        ImGui::RenderPlatformWindowsDefault();
+    }
+
+    typedef void (*Platform_CreateWindow_Callback)(ImGuiViewport *vp);
+    ZGUI_API void zguiSetPlatformCreateWindowCallback(Platform_CreateWindow_Callback callback)
+    {
+        ImGui::GetPlatformIO().Platform_CreateWindow = callback;
+    }
+
+    typedef void (*Platform_DestroyWindow_Callback)(ImGuiViewport *vp);
+    ZGUI_API void zguiSetPlatformDestroyWindowCallback(Platform_DestroyWindow_Callback callback)
+    {
+        ImGui::GetPlatformIO().Platform_DestroyWindow = callback;
+    }
+
+    typedef void (*Platform_ShowWindow_Callback)(ImGuiViewport *vp);
+    ZGUI_API void zguiSetPlatformShowWindowCallback(Platform_ShowWindow_Callback callback)
+    {
+        ImGui::GetPlatformIO().Platform_ShowWindow = callback;
+    }
+
+    typedef void (*Platform_SetWindowPos_Callback)(ImGuiViewport *vp, ImVec2 pos);
+    ZGUI_API void zguiSetPlatformSetWindowPosCallback(Platform_SetWindowPos_Callback callback)
+    {
+        ImGui::GetPlatformIO().Platform_SetWindowPos = callback;
+    }
+
+    typedef ImVec2 (*Platform_GetWindowPos_Callback)(ImGuiViewport *vp);
+    ZGUI_API void zguiSetPlatformGetWindowPosCallback(Platform_GetWindowPos_Callback callback)
+    {
+        ImGui::GetPlatformIO().Platform_GetWindowPos = callback;
+    }
+
+    typedef void (*Platform_SetWindowSize_Callback)(ImGuiViewport *vp, ImVec2 pos);
+    ZGUI_API void zguiSetPlatformSetWindowSizeCallback(Platform_SetWindowSize_Callback callback)
+    {
+        ImGui::GetPlatformIO().Platform_SetWindowSize = callback;
+    }
+
+    typedef ImVec2 (*Platform_GetWindowSize_Callback)(ImGuiViewport *vp);
+    ZGUI_API void zguiSetPlatformGetWindowSizeCallback(Platform_GetWindowSize_Callback callback)
+    {
+        ImGui::GetPlatformIO().Platform_GetWindowSize = callback;
+    }
+
+    typedef void (*Platform_SetWindowFocus_Callback)(ImGuiViewport *vp);
+    ZGUI_API void zguiSetPlatformSetWindowFocusCallback(Platform_SetWindowFocus_Callback callback)
+    {
+        ImGui::GetPlatformIO().Platform_SetWindowFocus = callback;
+    }
+
+    typedef bool (*Platform_GetWindowFocus_Callback)(ImGuiViewport *vp);
+    ZGUI_API void zguiSetPlatformGetWindowFocusCallback(Platform_GetWindowFocus_Callback callback)
+    {
+        ImGui::GetPlatformIO().Platform_GetWindowFocus = callback;
+    }
+
+    typedef bool (*Platform_GetWindowMinimized_Callback)(ImGuiViewport *vp);
+    ZGUI_API void zguiSetPlatformGetWindowMinimizedCallback(Platform_GetWindowMinimized_Callback callback)
+    {
+        ImGui::GetPlatformIO().Platform_GetWindowMinimized = callback;
+    }
+
+    typedef void (*Platform_SetWindowTitle_Callback)(ImGuiViewport *vp, const char *str);
+    ZGUI_API void zguiSetPlatformSetWindowTitleCallback(Platform_SetWindowTitle_Callback callback)
+    {
+        ImGui::GetPlatformIO().Platform_SetWindowTitle = callback;
+    }
+
+    typedef void (*Renderer_CreateWindow_Callback)(ImGuiViewport *vp);
+    ZGUI_API void zguiSetRendererCreateWindowCallback(Renderer_CreateWindow_Callback callback)
+    {
+        ImGui::GetPlatformIO().Renderer_CreateWindow = callback;
+    }
+
+    typedef void (*Renderer_DestroyWindow_Callback)(ImGuiViewport *vp);
+    ZGUI_API void zguiSetRendererDestroyWindowCallback(Renderer_DestroyWindow_Callback callback)
+    {
+        ImGui::GetPlatformIO().Renderer_DestroyWindow = callback;
+    }
+
+    typedef void (*Renderer_SetWindowSize_Callback)(ImGuiViewport *vp, ImVec2 size);
+    ZGUI_API void zguiSetRendererSetWindowSizeCallback(Renderer_SetWindowSize_Callback callback)
+    {
+        ImGui::GetPlatformIO().Renderer_SetWindowSize = callback;
+    }
+
+    typedef void (*Renderer_RenderWindow_Callback)(ImGuiViewport *vp, void *render_arg);
+    ZGUI_API void zguiSetRendererRenderWindowCallback(Renderer_RenderWindow_Callback callback)
+    {
+        ImGui::GetPlatformIO().Renderer_RenderWindow = callback;
+    }
+
     ZGUI_API ImFont *zguiIoAddFontFromFileWithConfig(
         const char *filename,
         float size_pixels,
@@ -1559,6 +1659,11 @@ extern "C"
     ZGUI_API void zguiIoSetIniFilename(const char *filename)
     {
         ImGui::GetIO().IniFilename = filename;
+    }
+
+    ZGUI_API void zguiIoSetBackendFlags(ImGuiBackendFlags flags)
+    {
+        ImGui::GetIO().BackendFlags = flags;
     }
 
     ZGUI_API void zguiIoSetConfigFlags(ImGuiConfigFlags flags)
@@ -2593,6 +2698,26 @@ extern "C"
         const ImVec2 sz = viewport->WorkSize;
         p[0] = sz.x;
         p[1] = sz.y;
+    }
+
+    ZGUI_API void *zguiViewport_GetPlatformUserData(ImGuiViewport *viewport)
+    {
+        return viewport->PlatformUserData;
+    }
+
+    ZGUI_API void zguiViewport_SetRendererUserData(ImGuiViewport *viewport, void *user_data)
+    {
+        viewport->RendererUserData = user_data;
+    }
+
+    ZGUI_API void *zguiViewport_GetRendererUserData(ImGuiViewport *viewport)
+    {
+        return viewport->RendererUserData;
+    }
+
+    ZGUI_API ImDrawData *zguiViewport_GetDrawData(ImGuiViewport *viewport)
+    {
+        return viewport->DrawData;
     }
 
     //--------------------------------------------------------------------------------------------------
