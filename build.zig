@@ -56,6 +56,11 @@ pub fn build(b: *std.Build) void {
             "use_32bit_draw_idx",
             "Use 32-bit draw index",
         ) orelse false,
+        .with_file_dialog = b.option(
+            bool,
+            "with_file_dialog",
+            "Build with file dialog support",
+        ) orelse false,
     };
 
     const options_step = b.addOptions();
@@ -199,6 +204,19 @@ pub fn build(b: *std.Build) void {
         imgui.addCSourceFile(.{ .file = b.path("libs/node_editor/imgui_canvas.cpp"), .flags = cflags });
         imgui.addCSourceFile(.{ .file = b.path("libs/node_editor/imgui_node_editor_api.cpp"), .flags = cflags });
         imgui.addCSourceFile(.{ .file = b.path("libs/node_editor/imgui_node_editor.cpp"), .flags = cflags });
+    }
+
+    if (options.with_file_dialog) {
+        imgui.addCSourceFile(.{
+            .file = b.path("src/zimguifiledialog.cpp"),
+            .flags = cflags,
+        });
+
+        imgui.root_module.addCMacro("USE_STD_FILESYSTEM", "1");
+        //imgui.root_module.addCMacro("USE_PLACES_FEATURE", "1");
+        //imgui.root_module.addCMacro("USE_PLACES_BOOKMARKS", "1");
+        //imgui.root_module.addCMacro("USE_PLACES_DEVICES", "1");
+        imgui.addCSourceFile(.{ .file = b.path("libs/imguifiledialog/ImGuiFileDialog.cpp"), .flags = cflags });
     }
 
     if (options.with_te) {

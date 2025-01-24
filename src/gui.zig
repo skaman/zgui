@@ -7,6 +7,7 @@
 pub const plot = @import("plot.zig");
 pub const gizmo = @import("gizmo.zig");
 pub const node_editor = @import("node_editor.zig");
+pub const file_dialog = @import("imguifiledialog.zig");
 pub const te = @import("te.zig");
 
 pub const backend = switch (@import("zgui_options").backend) {
