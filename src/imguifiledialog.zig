@@ -132,22 +132,22 @@ pub fn free_selection(selection: *const Selection) void {
 }
 extern fn imguifiledialog_FreeSelection(selection: *const Selection) void;
 
-pub fn get_file_path_name(buffer: []u8, result_mode: ResultMode) void {
+pub fn get_file_path_name(buffer: [:0]u8, result_mode: ResultMode) void {
     imguifiledialog_GetFilePathName(&buffer[0], buffer.len, result_mode);
 }
 extern fn imguifiledialog_GetFilePathName(buffer: [*c]const u8, buffer_size: usize, result_mode: ResultMode) void;
 
-pub fn get_current_file_name(buffer: []u8, result_mode: ResultMode) void {
+pub fn get_current_file_name(buffer: [:0]u8, result_mode: ResultMode) void {
     return imguifiledialog_GetCurrentFileName(&buffer[0], buffer.len, result_mode);
 }
 extern fn imguifiledialog_GetCurrentFileName(buffer: [*c]const u8, buffer_size: usize, result_mode: ResultMode) void;
 
-pub fn get_current_path(buffer: []u8) void {
+pub fn get_current_path(buffer: [:0]u8) void {
     return imguifiledialog_GetCurrentPath(&buffer[0], buffer.len);
 }
 extern fn imguifiledialog_GetCurrentPath(buffer: [*c]const u8, buffer_size: usize) void;
 
-pub fn get_current_filter(buffer: []u8) void {
+pub fn get_current_filter(buffer: [:0]u8) void {
     return imguifiledialog_GetCurrentFilter(&buffer[0], buffer.len);
 }
 extern fn imguifiledialog_GetCurrentFilter(buffer: [*c]const u8, buffer_size: usize) void;
