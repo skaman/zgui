@@ -145,7 +145,7 @@ pub const Config = extern struct {
 //
 // Editor
 //
-const SaveReasonFlags = packed struct(u32) {
+pub const SaveReasonFlags = packed struct(u32) {
     navigation: bool,
     position: bool,
     size: bool,
