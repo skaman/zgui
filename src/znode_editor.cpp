@@ -1,4 +1,5 @@
 #include "imgui.h"
+#include "imgui_internal.h"
 
 #include "../node_editor/imgui_node_editor.h"
 
@@ -81,6 +82,25 @@ extern "C"
     ZGUI_API void node_editor_NavigateToSelection(bool zoomIn, float duration)
     {
         ed::NavigateToSelection(zoomIn, duration);
+    }
+
+    ZGUI_API void node_editor_NavigateToBounds(const float bounds[4], bool zoomIn, float duration)
+    {
+        ed::NavigateToBounds(ImRect(bounds[0], bounds[1], bounds[2], bounds[3]), zoomIn, duration);
+    }
+
+    ZGUI_API void node_editor_GetViewRect(float *bounds)
+    {
+        auto value = ed::GetViewRect();
+        bounds[0] = value.Min.x;
+        bounds[1] = value.Min.y;
+        bounds[2] = value.Max.x;
+        bounds[3] = value.Max.y;
+    }
+
+    ZGUI_API float node_editor_GetCurrentZoom()
+    {
+        return ed::GetCurrentZoom();
     }
 
     ZGUI_API void node_editor_SelectNode(ed::NodeId nodeId, bool append)

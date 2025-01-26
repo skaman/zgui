@@ -16,6 +16,7 @@
 
 //------------------------------------------------------------------------------
 # include <imgui.h>
+# include <imgui_internal.h>
 # include <cstdint> // std::uintXX_t
 # include <utility> // std::move
 
@@ -387,6 +388,7 @@ IMGUI_NODE_EDITOR_API int BreakLinks(PinId pinId); // Break all links connected 
 
 IMGUI_NODE_EDITOR_API void NavigateToContent(float duration = -1);
 IMGUI_NODE_EDITOR_API void NavigateToSelection(bool zoomIn = false, float duration = -1);
+IMGUI_NODE_EDITOR_API void NavigateToBounds(const ImRect& bounds, bool zoomIn, float duration);
 
 IMGUI_NODE_EDITOR_API bool ShowNodeContextMenu(NodeId* nodeId);
 IMGUI_NODE_EDITOR_API bool ShowPinContextMenu(PinId* pinId);
@@ -407,6 +409,7 @@ IMGUI_NODE_EDITOR_API int  GetActionContextNodes(NodeId* nodes, int size);
 IMGUI_NODE_EDITOR_API int  GetActionContextLinks(LinkId* links, int size);
 IMGUI_NODE_EDITOR_API void EndShortcut();
 
+IMGUI_NODE_EDITOR_API ImRect GetViewRect();
 IMGUI_NODE_EDITOR_API float GetCurrentZoom();
 
 IMGUI_NODE_EDITOR_API NodeId GetHoveredNode();

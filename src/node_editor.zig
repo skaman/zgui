@@ -211,6 +211,23 @@ pub fn navigateToSelection(zoomIn: bool, duration: f32) void {
 }
 extern fn node_editor_NavigateToSelection(zoomIn: bool, duration: f32) void;
 
+pub fn navigateToBounds(bounds: *[4]f32, zoomIn: bool, duration: f32) void {
+    node_editor_NavigateToBounds(bounds, zoomIn, duration);
+}
+extern fn node_editor_NavigateToBounds(bounds: [*]const f32, zoomIn: bool, duration: f32) void;
+
+pub fn getViewRect() [4]f32 {
+    var rect: [4]f32 = .{ 0, 0, 0, 0 };
+    node_editor_GetViewRect(&rect);
+    return rect;
+}
+extern fn node_editor_GetViewRect(origin: [*]f32) void;
+
+pub fn getCurrentZoom() f32 {
+    return node_editor_GetCurrentZoom();
+}
+extern fn node_editor_GetCurrentZoom() f32;
+
 pub fn selectNode(nodeId: NodeId, append: bool) void {
     node_editor_SelectNode(nodeId, append);
 }
