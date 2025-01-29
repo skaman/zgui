@@ -84,9 +84,9 @@ extern "C"
         ed::NavigateToSelection(zoomIn, duration);
     }
 
-    ZGUI_API void node_editor_NavigateToBounds(const float bounds[4], bool zoomIn, float duration)
+    ZGUI_API void node_editor_NavigateToBounds(const float bounds[4])
     {
-        ed::NavigateToBounds(ImRect(bounds[0], bounds[1], bounds[2], bounds[3]), zoomIn, duration);
+        ed::NavigateToBounds(ImRect(bounds[0], bounds[1], bounds[2], bounds[3]));
     }
 
     ZGUI_API void node_editor_GetViewRect(float *bounds)
@@ -233,6 +233,11 @@ extern "C"
         return ed::QueryNewLink(startId, endId);
     }
 
+    ZGUI_API bool node_editor_QueryNewNode(ed::PinId *pinId)
+    {
+        return ed::QueryNewNode(pinId);
+    }
+
     ZGUI_API bool node_editor_AcceptNewItem(const float color[4], float thickness)
     {
         return ed::AcceptNewItem(ImVec4(color[0], color[1], color[2], color[3]), thickness);
@@ -355,5 +360,19 @@ extern "C"
     ZGUI_API ImDrawList *node_editor_GetNodeBackgroundDrawList(ed::NodeId nodeId)
     {
         return ed::GetNodeBackgroundDrawList(nodeId);
+    }
+
+    ZGUI_API void node_editor_ScreenToCanvas(const float screenPos[2], float *out)
+    {
+        auto value = ed::ScreenToCanvas(ImVec2(screenPos[0], screenPos[1]));
+        out[0] = value.x;
+        out[1] = value.y;
+    }
+
+    ZGUI_API void node_editor_CanvasToScreen(const float canvasPos[2], float *out)
+    {
+        auto value = ed::CanvasToScreen(ImVec2(canvasPos[0], canvasPos[1]));
+        out[0] = value.x;
+        out[1] = value.y;
     }
 } /* extern "C" */

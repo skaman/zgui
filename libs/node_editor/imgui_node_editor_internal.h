@@ -1437,6 +1437,11 @@ struct EditorContext
         m_NavigateAction.NavigateTo(bounds, zoomMode, duration);
     }
 
+    void NavigateToBounds(const ImRect& bounds)
+    {
+        m_NavigateAction.NavigateTo(bounds, NavigateAction::ZoomMode::Exact, 0);
+    }
+
     void RegisterAnimation(Animation* animation);
     void UnregisterAnimation(Animation* animation);
 

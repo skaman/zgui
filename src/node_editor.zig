@@ -211,10 +211,10 @@ pub fn navigateToSelection(zoomIn: bool, duration: f32) void {
 }
 extern fn node_editor_NavigateToSelection(zoomIn: bool, duration: f32) void;
 
-pub fn navigateToBounds(bounds: *[4]f32, zoomIn: bool, duration: f32) void {
-    node_editor_NavigateToBounds(bounds, zoomIn, duration);
+pub fn navigateToBounds(bounds: *[4]f32) void {
+    node_editor_NavigateToBounds(bounds);
 }
-extern fn node_editor_NavigateToBounds(bounds: [*]const f32, zoomIn: bool, duration: f32) void;
+extern fn node_editor_NavigateToBounds(bounds: [*]const f32) void;
 
 pub fn getViewRect() [4]f32 {
     var rect: [4]f32 = .{ 0, 0, 0, 0 };
@@ -373,6 +373,16 @@ pub fn queryNewLink(startId: *?PinId, endId: *?PinId) bool {
 }
 extern fn node_editor_QueryNewLink(startId: *PinId, endId: *PinId) bool;
 
+pub fn queryNewNode(pinId: *?PinId) bool {
+    var id: PinId = 0;
+    const result = node_editor_QueryNewNode(&id);
+
+    pinId.* = if (id == 0) null else id;
+
+    return result;
+}
+extern fn node_editor_QueryNewNode(pinId: *PinId) bool;
+
 pub fn acceptNewItem(color: [4]f32, thickness: f32) bool {
     return node_editor_AcceptNewItem(&color, thickness);
 }
@@ -516,3 +526,17 @@ pub fn getNodeBackgroundDrawList(node_id: NodeId) *anyopaque {
     return node_editor_GetNodeBackgroundDrawList(node_id);
 }
 extern fn node_editor_GetNodeBackgroundDrawList(node_id: NodeId) *anyopaque;
+
+pub fn screenToCanvas(pos: [2]f32) [2]f32 {
+    var out: [2]f32 = .{ 0, 0 };
+    node_editor_ScreenToCanvas(&pos, &out);
+    return out;
+}
+extern fn node_editor_ScreenToCanvas(pos: [*]const f32, out: [*]f32) void;
+
+pub fn canvasToScreen(pos: [2]f32) [2]f32 {
+    var out: [2]f32 = .{ 0, 0 };
+    node_editor_CanvasToScreen(&pos, &out);
+    return out;
+}
+extern fn node_editor_CanvasToScreen(pos: [*]const f32, out: [*]f32) void;
